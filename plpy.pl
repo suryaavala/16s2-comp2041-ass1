@@ -39,6 +39,11 @@ while ($line = <>) {
       $new_line = $1;
       $new_line =~ tr/\$//d;
       print "if $new_line:\n";
+    } elsif ($line =~ /^\s*while\s*\((.*)\)\s*{$/){
+      #dealing with while loops
+      $new_line = $1;
+      $new_line =~ tr/\$//d;
+      print "while $new_line:\n";
     } elsif ($line =~ /\$.*[\s;]$/) {
       #python variable assignment and variable manipulation
       $new_line = substr $line,1,-2;
