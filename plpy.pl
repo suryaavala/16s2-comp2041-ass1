@@ -101,6 +101,14 @@ while ($line = <$fh>) {
       $new_line =~ s/eq/==/g;
       #print "$indent";
       print "while $new_line:\n";
+    } elsif ($line =~ /^foreach.*$/) {
+      $line =~ /^foreach \$(.*) \(.*/g;
+      $loop_var = $1;
+      $line =~ /\((.*)\.\..*\)/;
+      $starting = $1;
+      $line =~ /\(.*\.\.(.*)\)/;
+      $ending = $1+1;
+      print "for $loop_var in range($starting, $ending):\n"
     } elsif ($line =~ /\$(.*) = <STDIN>;/) {
       #handling <STDIN>
       print "$1 = sys.stdin.readline()\n";
