@@ -77,7 +77,7 @@ while ($line = <$fh>) {
       $new_line =~ tr/\$//d;
       #print "$indent";
       print "while $new_line:\n";
-    } elsif ($line =~ /(\$.*);$/) {
+    } elsif ($line =~ /^(\$.*);$/) {
       #python variable assignment and variable manipulation
       $new_line = $1;
       $new_line =~ tr/\$//d;
@@ -86,12 +86,19 @@ while ($line = <$fh>) {
     } elsif ($line =~ /}/) {
       #ignore closing braces and move on
       next;
+    } elsif ($line =~ /<STDIN>/) {
+      #handling <STDIN>
+      $line =~ s/^\s+|\s+$//g;
+
+      print "$line\n";
+
     }
     else {
         # Lines we can't translate are turned into comments
         #$line =~ /^(\s*)/;
         #$indent = substr $1,0,-1;
         #print "$indent";
+        $line =~ s/^\s+|\s+$//g;
         print "$line\n";
     }
 }
