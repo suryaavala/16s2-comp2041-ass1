@@ -67,7 +67,7 @@ while ($line = <$fh>) {
       #$line =~ /^(.*)if.*$/g;
       #$indent = substr $1,0,-1;
       $new_line =~ tr/\$//d;
-      print "$indent";
+      #print "$indent";
       print "if $new_line:\n";
     } elsif ($line =~ /^\s*while\s*\((.*)\)\s*{$/){
       #dealing with while loops
