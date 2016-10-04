@@ -76,8 +76,7 @@ while ($line = <$fh>) {
           #print "3\n";
           #print "$indent";
           print "print($new_line)\n";
-        }
-        else {
+        } else {
         #print "4\n";
         #print "$indent";
         print "print(\"$new_line\")\n";
@@ -114,17 +113,17 @@ while ($line = <$fh>) {
         $line =~ /^foreach \$(.*) \(.*/g;
         $loop_var = $1;
         if ($line =~ /\(.*\.\..*\)/) {
-          #if looping over a range of numbers
-        $line =~ /\((.*)\.\..*\)/;
-        $starting = $1;
-        $line =~ /\(.*\.\.(.*)\)/;
-        $ending = $1+1;
-        print "for $loop_var in range($starting, $ending):\n"
-      } else {
-        #looping over a list
-        $line =~ /\((.*)\)/;
-        $loop_list = $1;
-        print "for $loop_var in ($loop_list):\n"
+            #if looping over a range of numbers
+          $line =~ /\((.*)\.\..*\)/;
+          $starting = $1;
+          $line =~ /\(.*\.\.(.*)\)/;
+          $ending = $1+1;
+          print "for $loop_var in range($starting, $ending):\n"
+        } else {
+          #looping over a list
+          $line =~ /\((.*)\)/;
+          $loop_list = $1;
+          print "for $loop_var in ($loop_list):\n"
       }
     } elsif ($line =~ /\$(.*) = <STDIN>;/) {
       #handling <STDIN>
@@ -143,9 +142,6 @@ while ($line = <$fh>) {
       print "$new_line\n";
     } else {
         # Lines we can't translate are turned into comments
-        #$line =~ /^(\s*)/;
-        #$indent = substr $1,0,-1;
-        #print "$indent";
         print "$line\n";
     }
 }
