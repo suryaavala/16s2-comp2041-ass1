@@ -5,6 +5,10 @@
 my $filename = 'temp.txt';
 open(my $fh, '+>', $filename)
   or die "Could not open file '$filename' $!";
+
+#loop1 to loop over lines of perl code
+  #then import necessary py libraries
+  #store the perl code in temp.txt file which will be processed later
 while ($line = <>){
 
   if ($line =~ /<STDIN>/ || $line =~ /ARGV/) {
@@ -23,6 +27,7 @@ close $fh;
 open($fh, '<', $filename)
   or die "Could not open file '$filename' $!";
 
+#loop2 actual processing of perl code after printing import statements
 while ($line = <$fh>) {
 
    if ($line =~ /}/) {
@@ -31,26 +36,29 @@ while ($line = <$fh>) {
    }
    if ($line =~/ARGV/)
    {
+     #replacing @ARGV by sys.argv[1:] in line
      $line =~ s/\@ARGV/sys.argv[1:]/g;
    }
    if ($line =~ /join\((.*)\)/) {
+     #hndling join
+     #replacing join (''.list) by ''.join(list)
      $join_statement = $1;
      $join_statement =~ /('.*')/;
+     #character used in joining the list strings
      $join_char = $1;
      $join_statement =~ /'.*', (.*)$/;
+     #list of strings to be joined
      $join_list = $1;
      $py_join = $join_char.'.'.'join('.''.$join_list.''.')';
-     #print "$py_join\n";
      $line =~ s/join.*\)/$py_join/g;
-     #print "$line\n";
    }
-   #printing indentation
+   #printing indentation for this line
    $line =~ /^(\s*).*$/g;
    $indent = substr $1,0,-1;
    print "$indent";
    $line =~ s/^\s+|\s+$//g;
-   #if ($line =~ /Thank/) { print "indent=$indent.\nline=$line.\n";}
 
+   #processing blank lines, print, print variable, if, while, foreach, variable manipulation statements, <STDIN> and chomp
    if ($line =~ /^\s*#/ || $line =~ /^\s*$/) {
 
         # Blank & comment lines can be passed unchanged
