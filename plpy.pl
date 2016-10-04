@@ -18,21 +18,28 @@ while ($line = <>) {
         # Python's print adds a new-line character by default
         # so we need to delete it from the Perl print statement
         $new_line = $1;
-        if ($1 =~ /\$/) {
+        $line =~ /^(.*)print.*$/g;
+        $indent = substr $1,0,-1;
+        if ($new_line =~ /\$/) {
           #if printing a variable then strip $ and ""
           $new_line =~ tr/\$"//d;
           #print "3\n";
+          print "$indent";
           print "print($new_line)\n";
         }
         else {
         #print "4\n";
+        print "$indent";
         print "print(\"$new_line\")\n";
         }
     } elsif ($line =~ /^\s*print\s*(.*)"\\n"[\s;]*$/) {
       #printing variables
       $new_line = $1;
+      $line =~ /^(.*)print.*$/g;
+      $indent = substr $1,0,-1;
       $new_line =~ tr/\$,//d;
       $new_line =~ s/^\s+|\s+$//g;
+      print "$indent";
       print "print($new_line)\n";
     } elsif ($line =~ /^\s*if\s*\((.*)\)\s*{$/) {
       #dealing with if conditions
