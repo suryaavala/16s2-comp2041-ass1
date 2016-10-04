@@ -29,6 +29,7 @@ while ($line = <$fh>) {
    $line =~ /^(\s*).*$/g;
    $indent = substr $1,0,-1;
    print "$indent";
+   $line =~ s/^\s+|\s+$//g;
    if ($line =~ /^\s*#/ || $line =~ /^\s*$/) {
 
         # Blank & comment lines can be passed unchanged
@@ -88,7 +89,6 @@ while ($line = <$fh>) {
       next;
     } elsif ($line =~ /<STDIN>/) {
       #handling <STDIN>
-      $line =~ s/^\s+|\s+$//g;
 
       print "$line\n";
 
@@ -98,7 +98,6 @@ while ($line = <$fh>) {
         #$line =~ /^(\s*)/;
         #$indent = substr $1,0,-1;
         #print "$indent";
-        $line =~ s/^\s+|\s+$//g;
         print "$line\n";
     }
 }
