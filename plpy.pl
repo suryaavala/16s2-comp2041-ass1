@@ -28,6 +28,7 @@ while ($line = <$fh>) {
    #printing indentation
    $line =~ /^(\s*).*$/g;
    $indent = substr $1,0,-1;
+   print "$indent";
    if ($line =~ /^\s*#/ || $line =~ /^\s*$/) {
 
         # Blank & comment lines can be passed unchanged
@@ -43,12 +44,12 @@ while ($line = <$fh>) {
           #if printing a variable then strip $ and ""
           $new_line =~ tr/\$"//d;
           #print "3\n";
-          print "$indent";
+          #print "$indent";
           print "print($new_line)\n";
         }
         else {
         #print "4\n";
-        print "$indent";
+        #print "$indent";
         print "print(\"$new_line\")\n";
         }
     } elsif ($line =~ /^\s*print\s*(.*)"\\n"[\s;]*$/) {
@@ -58,7 +59,7 @@ while ($line = <$fh>) {
       #$indent = substr $1,0,-1;
       $new_line =~ tr/\$,//d;
       $new_line =~ s/^\s+|\s+$//g;
-      print "$indent";
+      #print "$indent";
       print "print($new_line)\n";
     } elsif ($line =~ /^\s*if\s*\((.*)\)\s*{$/) {
       #dealing with if conditions
@@ -74,7 +75,7 @@ while ($line = <$fh>) {
       #$line =~ /^(.*)while.*$/g;
       #$indent = substr $1,0,-1;
       $new_line =~ tr/\$//d;
-      print "$indent";
+      #print "$indent";
       print "while $new_line:\n";
     } elsif ($line =~ /\$.*[\s;]$/) {
       #python variable assignment and variable manipulation
@@ -89,7 +90,7 @@ while ($line = <$fh>) {
         # Lines we can't translate are turned into comments
         #$line =~ /^(\s*)/;
         #$indent = substr $1,0,-1;
-        print "$indent";
+        #print "$indent";
         print "$line\n";
     }
 }
