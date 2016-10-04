@@ -77,10 +77,11 @@ while ($line = <$fh>) {
       $new_line =~ tr/\$//d;
       #print "$indent";
       print "while $new_line:\n";
-    } elsif ($line =~ /\$.*[\s;]$/) {
+    } elsif ($line =~ /(\$.*);$/) {
       #python variable assignment and variable manipulation
-      $new_line = substr $line,1,-2;
+      $new_line = $1;
       $new_line =~ tr/\$//d;
+
       print "$new_line\n";
     } elsif ($line =~ /}/) {
       #ignore closing braces and move on
