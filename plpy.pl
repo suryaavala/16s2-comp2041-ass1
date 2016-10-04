@@ -25,11 +25,18 @@ open($fh, '<', $filename)
   or die "Could not open file '$filename' $!";
 
 while ($line = <$fh>) {
+   #handling indentation
+   if ($line =~ /}/) {
+     #ignore closing braces and move on
+     next;
+   } else {
    #printing indentation
    $line =~ /^(\s*).*$/g;
    $indent = substr $1,0,-1;
    print "$indent";
    $line =~ s/^\s+|\s+$//g;
+   #if ($line =~ /Thank/) { print "indent=$indent.\nline=$line.\n";}
+   }
    if ($line =~ /^\s*#/ || $line =~ /^\s*$/) {
 
         # Blank & comment lines can be passed unchanged
@@ -95,11 +102,7 @@ while ($line = <$fh>) {
       $new_line = $1;
       $new_line =~ tr/\$//d;
       print "$new_line\n";
-    } elsif ($line =~ /}/) {
-      #ignore closing braces and move on
-      next;
-    }
-    else {
+    } else {
         # Lines we can't translate are turned into comments
         #$line =~ /^(\s*)/;
         #$indent = substr $1,0,-1;
