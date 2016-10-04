@@ -42,7 +42,7 @@ while ($line = <$fh>) {
      $py_join = $join_char.'.'.'join('.''.$join_list.''.')';
      #print "$py_join\n";
      $line =~ s/join.*\)/$py_join/g;
-     print "$line\n";
+     #print "$line\n";
    }
    #printing indentation
    $line =~ /^(\s*).*$/g;
