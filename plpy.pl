@@ -102,13 +102,22 @@ while ($line = <$fh>) {
       #print "$indent";
       print "while $new_line:\n";
     } elsif ($line =~ /^foreach.*$/) {
-      $line =~ /^foreach \$(.*) \(.*/g;
-      $loop_var = $1;
-      $line =~ /\((.*)\.\..*\)/;
-      $starting = $1;
-      $line =~ /\(.*\.\.(.*)\)/;
-      $ending = $1+1;
-      print "for $loop_var in range($starting, $ending):\n"
+        #handling foreach loop
+        $line =~ /^foreach \$(.*) \(.*/g;
+        $loop_var = $1;
+        if ($line =~ /\(.*\.\..*\)/) {
+          #if looping over a range of numbers
+        $line =~ /\((.*)\.\..*\)/;
+        $starting = $1;
+        $line =~ /\(.*\.\.(.*)\)/;
+        $ending = $1+1;
+        print "for $loop_var in range($starting, $ending):\n"
+      } else {
+        #looping over a list
+        $line =~ /\((.*)\)/;
+        $loop_list = $1;
+        print "for $loop_var in ($loop_list):\n"
+      }
     } elsif ($line =~ /\$(.*) = <STDIN>;/) {
       #handling <STDIN>
       print "$1 = sys.stdin.readline()\n";
