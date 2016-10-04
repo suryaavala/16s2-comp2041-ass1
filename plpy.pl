@@ -7,7 +7,7 @@ open(my $fh, '+>', $filename)
   or die "Could not open file '$filename' $!";
 while ($line = <>){
 
-  if ($line =~ /<STDIN>/) {
+  if ($line =~ /<STDIN>/ || $line =~ /ARGV/) {
     print "import sys\n";
     print $fh $line;
   } elsif ($line =~ /^#!/ && $. == 1) {
@@ -25,23 +25,23 @@ open($fh, '<', $filename)
   or die "Could not open file '$filename' $!";
 
 while ($line = <$fh>) {
-   #handling indentation
+
    if ($line =~ /}/) {
      #ignore closing braces and move on
      next;
-   } else {
+   }
    #printing indentation
    $line =~ /^(\s*).*$/g;
    $indent = substr $1,0,-1;
    print "$indent";
    $line =~ s/^\s+|\s+$//g;
    #if ($line =~ /Thank/) { print "indent=$indent.\nline=$line.\n";}
-   }
+   
    if ($line =~ /^\s*#/ || $line =~ /^\s*$/) {
 
         # Blank & comment lines can be passed unchanged
         #print "2\n";
-        print $line;
+        print "$line\n";
     } elsif ($line =~ /^\s*print\s*"(.*)\\n"[\s;]*$/) {
         # Python's print adds a new-line character by default
         # so we need to delete it from the Perl print statement
