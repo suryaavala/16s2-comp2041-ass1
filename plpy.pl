@@ -13,7 +13,6 @@ while ($line = <>){
   } elsif ($line =~ /^#!/ && $. == 1) {
 
       # translate #! line
-      #print "1\n";
       print "#!/usr/local/bin/python3.5 -u\n";
   } else {
     print $fh $line;
@@ -30,13 +29,28 @@ while ($line = <$fh>) {
      #ignore closing braces and move on
      next;
    }
+   if ($line =~/ARGV/)
+   {
+     $line =~ s/\@ARGV/sys.argv[1:]/g;
+   }
+   if ($line =~ /join\((.*)\)/) {
+     $join_statement = $1;
+     $join_statement =~ /('.*')/;
+     $join_char = $1;
+     $join_statement =~ /'.*', (.*)$/;
+     $join_list = $1;
+     $py_join = $join_char.'.'.'join('.''.$join_list.''.')';
+     #print "$py_join\n";
+     $line =~ s/join.*\)/$py_join/g;
+     print "$line\n";
+   }
    #printing indentation
    $line =~ /^(\s*).*$/g;
    $indent = substr $1,0,-1;
    print "$indent";
    $line =~ s/^\s+|\s+$//g;
    #if ($line =~ /Thank/) { print "indent=$indent.\nline=$line.\n";}
-   
+
    if ($line =~ /^\s*#/ || $line =~ /^\s*$/) {
 
         # Blank & comment lines can be passed unchanged
